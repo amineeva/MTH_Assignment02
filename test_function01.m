@@ -1,4 +1,4 @@
-function [fval, J] = testfunction_01(X)
+function [fval, J] = test_function01(X)
     x1 = X(:, 1);
     x2 = X(:, 2);
     x3 = X(:, 3);
