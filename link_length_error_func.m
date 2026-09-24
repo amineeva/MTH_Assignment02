@@ -24,7 +24,7 @@ function length_errors = link_length_error_func(vertex_coords, leg_params)
     vlist2 = leg_params.link_to_vertex_list(:, 2);
     length_errors = zeros(length(lengths), 1);
 
-    ycall = length(vertex_coords)/2
+    ycall = length(vertex_coords)/2; %Value for calling y values in the coordinates vector
     for i = 1:(length(vertex_coords)/2)
         v1 = vlist1(i); %Finds the value of the first vertex
         v2 = vlist2(i); %Finds the value of the second vertex
