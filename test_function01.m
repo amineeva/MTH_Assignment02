@@ -16,5 +16,5 @@ function [fval, J] = test_function01(X)
     df3x2 = cos(x1 + x2 + x3);
     df3x3 = cos(x1 + x2 + x3);
 
-    J = [df1x1, df1x2, df1x3; df2x1 df2x2, df2x3; df3x1, df2x2, df3x3];
-end   
+    J = [df1x1, df1x2, df1x3; df2x1, df2x2, df2x3; df3x1, df3x2, df3x3];
+end    
