@@ -35,6 +35,7 @@ t_collision = X_output(2);
 disp('Projectile solution: ')
 disp(theta)
 disp(t_collision)
+projectile_simulation(theta,t_collision)
 
 
 
