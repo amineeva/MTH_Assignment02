@@ -7,9 +7,8 @@
 
 % working example
 X = [1 5 10]';
-% [fval, J] = testfunction_01(X);
+[fval, J] = test_function01(X);
 % X_next = X_n - J\F;
-
 
 % thresholds
 ftol = 1e-14; % ftol: termination threshold (stop when abs(f(x_{i}))<ftol
@@ -18,7 +17,7 @@ dxmax = 1e14;
 max_iter = 1000; % number of iterations per trial
 num_iter = 1000; % number of trials we would like to perform
 
-[X_output, exit_flag] = multidim_newton_solver(@test_function01,X, dxtol, ftol, num_iter, dxmax);
+[X_output, exit_flag] = multidim_newton_solver(@test_function01,X, dxtol, ftol, num_iter, dxmax)
 
 
 % Inputs:
