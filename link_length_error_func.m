@@ -19,21 +19,28 @@
 %               where (xa,ya) and (xb,yb) are the coordinates of the vertices that
 %               are connected by the ith link, and d_i is the length of the ith link
 function length_errors = link_length_error_func(vertex_coords, leg_params)
-    lengths = leg_params.link_lengths
-    vlist1 = leg_params.link_to_vertex_list(:, 1);
-    vlist2 = leg_params.link_to_vertex_list(:, 2);
-    length_errors = zeros(length(lengths), 1);
 
-    ycall = length(vertex_coords)/2; %Value for calling y values in the coordinates vector
-    for i = 1:(length(vertex_coords)/2)
-        v1 = vlist1(i); %Finds the value of the first vertex
-        v2 = vlist2(i); %Finds the value of the second vertex
-        
+    lengths = leg_params.link_lengths;
+    vlist1 = leg_params.link_to_vertex_list(:,1);
+    vlist2 = leg_params.link_to_vertex_list(:,2);
+
+    length_errors = zeros(length(lengths),1);
+
+    for i = 1:length(lengths)
+
+        v1 = vlist1(i);
+        v2 = vlist2(i);
+
         d = lengths(i);
-        xa = vertex_coords(v1); xb = vertex_coords(v2); %Call out x coordinates
-        ya = vertex_coords(ycall + v1); yb = vertex_coords(ycall + v2); %Call out y coordinates
 
-        e_i = (xb-xa)^2 + (yb-ya)^2 - d^2;
-        length_errors(i) = e_i;
+        x1 = vertex_coords(2*v1 - 1);
+        y1 = vertex_coords(2*v1);
+
+        x2 = vertex_coords(2*v2 - 1);
+        y2 = vertex_coords(2*v2);
+
+        length_errors(i) = (x2-x1)^2 + (y2-y1)^2 - d^2;
+
     end
+
 end
