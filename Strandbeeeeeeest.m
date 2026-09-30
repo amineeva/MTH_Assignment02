@@ -67,10 +67,11 @@ max_iter = 40000; % number of trials we would like to perform
 
 %[vertices, exit_flag] = multidim_newton_solver(vertices_error_func,vertex_coords_guess, dxtol, ftol, max_iter, dxmax)
 
-
+max_theta=10*pi;
+increment=500;
 % choosing 3 rotations (test animation, can change this)
-    theta_vals = linspace(0, 10*pi, 500);
-
+    theta_vals = linspace(0, max_theta, increment);
+    vertices=[];
 
     %%% Set up figure for plot!!
     fig = figure();
@@ -95,14 +96,20 @@ max_iter = 40000; % number of trials we would like to perform
 
     dthetadt=2*pi;
     % main loop (frames!!)
-    q = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1.5, 'MaxHeadSize', 1);
+    q_e = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1.5, 'MaxHeadSize', 1);
+    q_i = quiver(NaN, NaN, NaN, NaN, 'y', 'LineWidth', 1.5, 'MaxHeadSize', 1);
+
     for i = 1:length(theta_vals)
         leg_params.theta = theta_vals(i); % current crank angle
 
 
-
 vertices_error_func = @(vertex_coords_guess) link_length_error_function2(vertex_coords_guess, leg_params);
 [vertices, exit_flag] = multidim_newton_solver(vertices_error_func,vertex_coords_guess, dxtol, ftol, max_iter, dxmax);
+dv=vertices-vertex_coords_guess;
+dtheta=max_theta/increment;
+e_dvdtheta=dv/dtheta;
+e_velocities=dthetadt.*e_dvdtheta;
+e_tip_velocities=e_velocities(end-1:end);
 [dvdtheta] = M_function(vertices,leg_params);
 velocities=dthetadt.*dvdtheta;
 tip_velocities=velocities(end-1:end);
@@ -114,7 +121,9 @@ tip_velocities=velocities(end-1:end);
         vertex_seven_x(end + 1) = coords(7, 1);
         vertex_seven_y(end + 1) = coords(7, 2);
         set(vertex_seven_path, 'XData', vertex_seven_x, 'YData', vertex_seven_y);
-        set(q, 'XData', vertices(end-1), 'YData', vertices(end), 'UData', 0.25* tip_velocities(1), 'VData', 0.25*tip_velocities(2));
+        set(q_e, 'XData', vertices(end-1), 'YData', vertices(end), 'UData', 0.25* e_tip_velocities(1), 'VData', 0.25*e_tip_velocities(2));
+        set(q_i, 'XData', vertices(end-1), 'YData', vertices(end), 'UData', 0.25* tip_velocities(1), 'VData', 0.25*tip_velocities(2));
+
         % use current solution as next guess for newton solver
         vertex_coords_guess = vertices;
         drawnow;
