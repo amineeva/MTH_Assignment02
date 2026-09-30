@@ -88,7 +88,7 @@ I(3,3) = 1;
 %Row 14
 I(4,4) = 1;
 
-M = [I; M]
+M = [I; M];
 B=zeros(14,1);
 B(1)= -leg_params.crank_length*sin(leg_params.theta);
 B(2)= leg_params.crank_length*cos(leg_params.theta);
