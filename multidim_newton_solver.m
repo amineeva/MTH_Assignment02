@@ -6,7 +6,8 @@ function [X_output, exit_flag] = multidim_newton_solver(fun,X,dxtol,ftol, max_it
     disp(fun)
 
     for i = 1:max_iter
-        [f, J] = fun(X);
+        f = fun(X);
+        J = approximate_jacobian(fun,X);
         %Pulls the value of the function and its derivative at x = x0
         if norm(f) == 0
             %Checks if it is a true root
