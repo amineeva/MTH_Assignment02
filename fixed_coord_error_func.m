@@ -18,8 +18,8 @@ function coord_errors = fixed_coord_error_func(vertex_coords, leg_params, theta)
     x2f = leg_params.vertex_pos2(1);
     y2f = leg_params.vertex_pos2(2);
 
-    x1f = x0 + crank*cos(theta);
-    y1f = y0 + crank*sin(theta);
+    x1f = x0f + crank*cos(theta);
+    y1f = y0f + crank*sin(theta);
 
     ycall = length(vertex_coords)/2;
 
