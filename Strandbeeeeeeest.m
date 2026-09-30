@@ -63,9 +63,59 @@ dxtol = 1e-13; % dxtol: termination threshold (stop when interval abs(x_{i+1}-x_
 dxmax = 1e14;
 max_iter = 40000; % number of trials we would like to perform
 
-vertices_error_func = @(vertex_coords_guess) link_length_error_function2(vertex_coords_guess, leg_params);
+%vertices_error_func = @(vertex_coords_guess) link_length_error_function2(vertex_coords_guess, leg_params);
 
-[vertices, exit_flag] = multidim_newton_solver(vertices_error_func,vertex_coords_guess, dxtol, ftol, max_iter, dxmax)
+%[vertices, exit_flag] = multidim_newton_solver(vertices_error_func,vertex_coords_guess, dxtol, ftol, max_iter, dxmax)
+
+
+% choosing 3 rotations (test animation, can change this)
+    theta_vals = linspace(0, 6*pi, 300);
+
+
+    %%% Set up figure for plot!!
+    fig = figure();
+    hold on;
+    axis equal;
+    grid on;
+
+    xlabel('X (-)');
+    ylabel('Y (-)');
+    title('Strandbeest Linkage Animation', 'Interpreter','latex');
+
+    % initialize linkage grawing
+    leg_drawing = initialize_leg_drawing(leg_params);
+
+    % need to overlay the leg tip in the animation
+    vertex_seven_x = [];
+    vertex_seven_y = [];
+    vertex_seven_path = plot(nan, nan, 'LineWidth', 1.5);
+
+
+
+    % main loop (frames!!)
+    for i = 1:length(theta_vals)
+        leg_params.theta = theta_vals(i); % current crank angle
+
+
+
+vertices_error_func = @(vertex_coords_guess) link_length_error_function2(vertex_coords_guess, leg_params);
+[vertices, exit_flag] = multidim_newton_solver(vertices_error_func,vertex_coords_guess, dxtol, ftol, max_iter, dxmax);
+[dvdtheta] = M_function(vertices,leg_params)
+
+        update_leg_drawing(vertices, leg_drawing, leg_params);
+        coords = column_to_matrix(vertices);
+        % record vertex 7 (f00t) position
+        vertex_seven_x(end + 1) = coords(7, 1);
+        vertex_seven_y(end + 1) = coords(7, 2);
+        set(vertex_seven_path, 'XData', vertex_seven_x, 'YData', vertex_seven_y);
+
+        % use current solution as next guess for newton solver
+        vertex_coords_guess = vertices;
+        drawnow;
+    end
+
+
+
 
 % function vertex_coords_root = compute_coords(vertex_coords_guess, leg_params, theta)
 % %your code here
