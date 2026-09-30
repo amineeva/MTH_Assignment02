@@ -3,7 +3,6 @@ function [X_output, exit_flag] = multidim_newton_solver(fun,X,dxtol,ftol, max_it
     %Initialize the code
     exit_flag = 0;
     X_output = X;
-    disp(fun)
 
     for i = 1:max_iter
         f = fun(X);
