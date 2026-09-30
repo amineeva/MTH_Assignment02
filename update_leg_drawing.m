@@ -52,8 +52,3 @@ function update_leg_drawing(complete_vertex_coords, leg_drawing, leg_params)
     
     set(leg_drawing.crank,'xdata',crank_x,'ydata',crank_y);
 end
-    crank_x = leg_params.crank_length*cos(leg_params.theta);
-    crank_y = leg_params.crank_length*sin(leg_params.theta);
-    
-    set(leg_drawing.crank,'xdata',crank_x,'ydata',crank_y);
-end
