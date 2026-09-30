@@ -18,8 +18,8 @@ function vertex_coords_root = compute_coords(vertex_coords_guess, leg_params, th
     ftol = 1e-14; % ftol: termination threshold (stop when abs(f(x_{i}))<ftol
     dxtol = 1e-14; % dxtol: termination threshold (stop when interval abs(x_{i+1}-x_i) < dxtol)
     dxmax = 1e14;
-    max_iter = 1000; % number of iterations per trial
-    num_iter = 1000; % number of trials we would like to perform
+    max_iter = 50; % number of iterations per trial
+    num_iter = 50; % number of trials we would like to perform
 
     % run newton's method
     [vertex_coords_root, exit_flag] = multidim_newton_solver(fun,vertex_guess_coords,dxtol,ftol, max_iter,dxmax);
