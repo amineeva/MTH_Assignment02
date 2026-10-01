@@ -74,7 +74,8 @@ increment=500;
     vertices=[];
 
     %%% Set up figure for plot!!
-    fig = figure();
+    fig1 = figure(1);
+    set(fig1,'units','pixels','position',[0 0 1440 1080]);
     hold on;
     axis equal;
     xlim([-150, 50]);
@@ -82,8 +83,8 @@ increment=500;
     grid on;
     
     
-    xlabel('X (-)', 'FontSize', 15);
-    ylabel('Y (-)', 'FontSize', 15);
+    xlabel('X (-)', 'FontSize', 15, 'Interpreter','latex');
+    ylabel('Y (-)', 'FontSize', 15, 'Interpreter','latex');
     title('Strandbeest Linkage Animation', 'Interpreter','latex', 'FontSize', 17);
 
     % initialize linkage grawing
@@ -96,8 +97,21 @@ increment=500;
 
     dthetadt=2*pi;
     % main loop (frames!!)
-    q_e = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1.5, 'MaxHeadSize', 1);
-    q_i = quiver(NaN, NaN, NaN, NaN, 'y', 'LineWidth', 1.5, 'MaxHeadSize', 1);
+    q_e = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1, 'MaxHeadSize', 1);
+    q_i = quiver(NaN, NaN, NaN, NaN, 'r', 'LineWidth', 1, 'MaxHeadSize', 1);
+    legend([q_e,q_i], 'Explicit Method Velocity','Implicit Method Velocity', Location='best')
+e_velocities_hist=zeros(length(theta_vals),2);
+i_velocities_hist=zeros(length(theta_vals),2);
+
+%VIDEO STUFF%%%
+% fname='Strandbeast_vid_velocities.avi';
+% mypath1 = 'C:\Users\msmith2\';
+% mypath2 = 'Downloads';
+
+% input_fname = [mypath1, mypath2,fname];
+% writerObj = VideoWriter(fname,'Motion JPEG AVI');
+% open(writerObj);
+
 
     for i = 1:length(theta_vals)
         leg_params.theta = theta_vals(i); % current crank angle
@@ -126,12 +140,38 @@ tip_velocities=velocities(end-1:end);
 
         % use current solution as next guess for newton solver
         vertex_coords_guess = vertices;
+        i_velocities_hist(i,:)=tip_velocities;
+        e_velocities_hist(i,:)=e_tip_velocities;
         drawnow;
+        %VIDEO STUFF 2, ELECTRIC BOOGALOO
+        % current_frame = getframe(fig1);
+        % writeVideo(writerObj,current_frame);
         pause(1/60)
+        
     end
+%MORE VIDEO STUFF
+%close(writerObj)
 
+i_velocities_hist(1,:) = [0,0];
+e_velocities_hist(1,:) = [0,0];
 
-
+figure;
+hold on
+plot(theta_vals,i_velocities_hist(:,1), '--r', LineWidth=2)
+plot(theta_vals,e_velocities_hist(:,1), '-b')
+xlabel('θ (rads)', 'Interpreter','latex')
+ylabel('X Velocity (-)', 'Interpreter','latex')
+title('Comparing Computed Leg Horizontal Velocities', 'Interpreter','latex')
+legend('Implicit Method', 'Explicit Method')
+figure;
+hold on
+plot(theta_vals,i_velocities_hist(:,2), '--r', LineWidth=2)
+plot(theta_vals,e_velocities_hist(:,2), '-b')
+xlabel('θ (rads)', 'Interpreter','latex')
+ylabel('Y Velocity (-)', 'Interpreter','latex')
+title('Comparing Computed Leg Vertical Velocities', 'Interpreter','latex')
+legend('Implicit Method', 'Explicit Method')
+clear
 
 % function vertex_coords_root = compute_coords(vertex_coords_guess, leg_params, theta)
 % %your code here
