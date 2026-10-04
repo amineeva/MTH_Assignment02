@@ -52,15 +52,18 @@ leg_params.crank_length = 15.0;
 leg_params.vertex_pos0 = [0;0];
 %fixed position coords of vertex 2
 leg_params.vertex_pos2 = [-38.0;-7.8];
-% 
+
+% Starting angle for crank
 leg_params.theta = pi/3;
 
+%Function that computes length errors and the Jacobian from the guessed
+%vertex values
 [length_errors, J] = link_length_error_function2(vertex_coords_guess, leg_params);
 
 %your code here
 ftol = 1e-13; % ftol: termination threshold (stop when abs(f(x_{i}))<ftol
 dxtol = 1e-13; % dxtol: termination threshold (stop when interval abs(x_{i+1}-x_i) < dxtol)
-dxmax = 1e14;
+dxmax = 1e14; 
 max_iter = 40000; % number of trials we would like to perform
 
 %vertices_error_func = @(vertex_coords_guess) link_length_error_function2(vertex_coords_guess, leg_params);
@@ -97,8 +100,8 @@ increment=500;
 
     dthetadt=2*pi;
     % main loop (frames!!)
-    q_e = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1, 'MaxHeadSize', 1);
-    q_i = quiver(NaN, NaN, NaN, NaN, 'r', 'LineWidth', 1, 'MaxHeadSize', 1);
+    q_e = quiver(NaN, NaN, NaN, NaN, 'b', 'LineWidth', 1, 'MaxHeadSize', .5, 'AutoScale','off');
+    q_i = quiver(NaN, NaN, NaN, NaN, 'r', 'LineWidth', 1, 'MaxHeadSize', .5, 'AutoScale','off');
     legend([q_e,q_i], 'Explicit Method Velocity','Implicit Method Velocity', Location='best')
 e_velocities_hist=zeros(length(theta_vals),2);
 i_velocities_hist=zeros(length(theta_vals),2);
@@ -157,19 +160,19 @@ e_velocities_hist(1,:) = [0,0];
 
 figure;
 hold on
-plot(theta_vals,i_velocities_hist(:,1), '--r', LineWidth=2)
+plot(theta_vals,i_velocities_hist(:,1), '--r', LineWidth=1)
 plot(theta_vals,e_velocities_hist(:,1), '-b')
-xlabel('θ (rads)', 'Interpreter','latex')
-ylabel('X Velocity (-)', 'Interpreter','latex')
-title('Comparing Computed Leg Horizontal Velocities', 'Interpreter','latex')
+xlabel('$\theta$ (rads)', 'Interpreter','latex', 'FontSize',16)
+ylabel('X Velocity (-)', 'Interpreter','latex', 'FontSize',16)
+title('Comparing Computed Leg Horizontal Velocities', 'Interpreter','latex',  'FontSize',20)
 legend('Implicit Method', 'Explicit Method')
 figure;
 hold on
-plot(theta_vals,i_velocities_hist(:,2), '--r', LineWidth=2)
+plot(theta_vals,i_velocities_hist(:,2), '--r', LineWidth=1)
 plot(theta_vals,e_velocities_hist(:,2), '-b')
-xlabel('θ (rads)', 'Interpreter','latex')
-ylabel('Y Velocity (-)', 'Interpreter','latex')
-title('Comparing Computed Leg Vertical Velocities', 'Interpreter','latex')
+xlabel('$\theta$ (rads)', 'Interpreter','latex', 'FontSize',16)
+ylabel('Y Velocity (-)', 'Interpreter','latex', 'FontSize',16)
+title('Comparing Computed Leg Vertical Velocities', 'Interpreter','latex', 'FontSize',20)
 legend('Implicit Method', 'Explicit Method')
 clear
 
